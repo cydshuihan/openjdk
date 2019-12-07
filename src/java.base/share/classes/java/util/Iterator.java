@@ -98,6 +98,7 @@ public interface Iterator<E> {
      *         been called after the last call to the {@code next}
      *         method
      */
+    // 从基础集合中删除通过此迭代器返回的最后一个元素，此方法只能在每次调用next()后调用。
     default void remove() {
         throw new UnsupportedOperationException("remove");
     }

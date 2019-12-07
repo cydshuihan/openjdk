@@ -263,6 +263,7 @@ public interface Collection<E> extends Iterable<E> {
      *
      * @return an {@code Iterator} over the elements in this collection
      */
+    // 返回这个集合的迭代器
     Iterator<E> iterator();
 
     /**
@@ -287,6 +288,7 @@ public interface Collection<E> extends Iterable<E> {
      * @return an array, whose {@linkplain Class#getComponentType runtime component
      * type} is {@code Object}, containing all of the elements in this collection
      */
+    // 返回这个集合的对象数组
     Object[] toArray();
 
     /**
@@ -340,6 +342,8 @@ public interface Collection<E> extends Iterable<E> {
      *         runtime component type} of the specified array
      * @throws NullPointerException if the specified array is null
      */
+    // 返回这个集合的对象数组，如果a的大小足够大，就将集合中的元素填入这个数组中。
+    // 剩余空间填补null；否则，分配一个新数组，其成员类型与a的成员类型相同，其长度等于集合的大小，并填充集合元素。
     <T> T[] toArray(T[] a);
 
     /**
