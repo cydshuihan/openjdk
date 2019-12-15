@@ -55,6 +55,9 @@ import java.util.function.Consumer;
  * @see Iterable
  * @since 1.2
  */
+// 泛型接口Iterator用于遍历集合元素，一般对于实现Iterator的集合只需实现hasNext,next,remove这三个方法即可
+// fail-fast机制：在多并发场景下，如果线程a通过Iterator遍历访问集合过程中，线程b修改了这个集合，则线程a会抛
+// 出ConcurrentModificationException异常。因此在多并发场景下应该使用线程安全的集合。
 public interface Iterator<E> {
     /**
      * Returns {@code true} if the iteration has more elements.
@@ -63,6 +66,8 @@ public interface Iterator<E> {
      *
      * @return {@code true} if the iteration has more elements
      */
+    // 如果被迭代的集合拥有下一个元素则返回true，也就是说当调用next方法将返回一个集合元素而不是抛出异常则返回true
+    // hasNext方法不会使游标向下一个元素移动，即多次调用hasNext()方法都是对同一个位置进行判断，游标不会向下移动
     boolean hasNext();
 
     /**
@@ -71,6 +76,7 @@ public interface Iterator<E> {
      * @return the next element in the iteration
      * @throws NoSuchElementException if the iteration has no more elements
      */
+    // 返回集合下一个元素，并将游标向下一个元素移动
     E next();
 
     /**
@@ -98,7 +104,7 @@ public interface Iterator<E> {
      *         been called after the last call to the {@code next}
      *         method
      */
-    // 从基础集合中删除通过此迭代器返回的最后一个元素，此方法只能在每次调用next()后调用。
+    // 删除集合上一次调用next方法返回的元素，此方法只能在每次调用next()后调用。jdk1.8默认实现含有方法体，用关键字default
     default void remove() {
         throw new UnsupportedOperationException("remove");
     }
@@ -128,6 +134,7 @@ public interface Iterator<E> {
      * @throws NullPointerException if the specified action is null
      * @since 1.8
      */
+    // jdk1.8新增的默认实现的方法，用于使用lambda表达式来遍历集合元素
     default void forEachRemaining(Consumer<? super E> action) {
         Objects.requireNonNull(action);
         while (hasNext())

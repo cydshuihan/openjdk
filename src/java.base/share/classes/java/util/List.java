@@ -135,6 +135,8 @@ import java.util.function.UnaryOperator;
  * @since 1.2
  */
 
+// List接口是一个有序且允许重复元素集合的一种抽象接口，可以使用索引按照任意顺序获取集合中元素，
+// 也可以使用迭代器顺序访问集合中元素
 public interface List<E> extends Collection<E> {
     // Query Operations
 
@@ -380,6 +382,7 @@ public interface List<E> extends Collection<E> {
      * @see #remove(Object)
      * @see #contains(Object)
      */
+    // 删除所有此集合与参数集合c相交的元素
     boolean removeAll(Collection<?> c);
 
     /**
@@ -402,6 +405,7 @@ public interface List<E> extends Collection<E> {
      * @see #remove(Object)
      * @see #contains(Object)
      */
+    // 保留所有此集合与参数集合c相交的元素
     boolean retainAll(Collection<?> c);
 
     /**
@@ -433,6 +437,8 @@ public interface List<E> extends Collection<E> {
      *         (<a href="Collection.html#optional-restrictions">optional</a>)
      * @since 1.8
      */
+
+    // 参数是函数式接口，这个函数式接口继承了Function<T,T>，传入的是一个值，返回的是一个经过操作符之后的值
     default void replaceAll(UnaryOperator<E> operator) {
         Objects.requireNonNull(operator);
         final ListIterator<E> li = this.listIterator();
@@ -500,14 +506,17 @@ public interface List<E> extends Collection<E> {
      *         contract
      * @since 1.8
      */
+
+    // 接收函数式接口参数
     @SuppressWarnings({"unchecked", "rawtypes"})
     default void sort(Comparator<? super E> c) {
         Object[] a = this.toArray();
+        // 使用了归并算法和TimSort算法来进行排序
         Arrays.sort(a, (Comparator) c);
         ListIterator<E> i = this.listIterator();
         for (Object e : a) {
             i.next();
-            i.set((E) e);
+            i.set((E) e); // 将排序后的数组元素依次设置给集合
         }
     }
 
@@ -610,6 +619,7 @@ public interface List<E> extends Collection<E> {
      * @throws IndexOutOfBoundsException if the index is out of range
      *         ({@code index < 0 || index > size()})
      */
+    // 添加元素到指定位置index，并将之前处于该位置的元素及其后面元素向右移动，即索引加1
     void add(int index, E element);
 
     /**
@@ -625,6 +635,7 @@ public interface List<E> extends Collection<E> {
      * @throws IndexOutOfBoundsException if the index is out of range
      *         ({@code index < 0 || index >= size()})
      */
+    // 删除指定位置index的元素，并将处于该位置后面的元素左移，即索引减1，并返回被删除的元素
     E remove(int index);
 
 
@@ -647,6 +658,7 @@ public interface List<E> extends Collection<E> {
      *         list does not permit null elements
      *         (<a href="Collection.html#optional-restrictions">optional</a>)
      */
+    // 返回参数对象在集合中首次出现的位置，如果此集合中没有这个元素则返回-1，比较通过非null对象的equals方法
     int indexOf(Object o);
 
     /**
@@ -666,6 +678,7 @@ public interface List<E> extends Collection<E> {
      *         list does not permit null elements
      *         (<a href="Collection.html#optional-restrictions">optional</a>)
      */
+    // 返回参数对象在集合中最后出现的位置，如果此集合中没有这个元素则返回-1，比较通过非null对象的equals方法
     int lastIndexOf(Object o);
 
 
@@ -678,6 +691,7 @@ public interface List<E> extends Collection<E> {
      * @return a list iterator over the elements in this list (in proper
      *         sequence)
      */
+    // 返回指向list集合元素的列表迭代器
     ListIterator<E> listIterator();
 
     /**
@@ -695,6 +709,8 @@ public interface List<E> extends Collection<E> {
      * @throws IndexOutOfBoundsException if the index is out of range
      *         ({@code index < 0 || index > size()})
      */
+    // 返回指向调用next方法则返回index位置元素，调用previous方法则返回index-1位置元素
+    // 之间位置的列表迭代器
     ListIterator<E> listIterator(int index);
 
     // View
@@ -733,6 +749,8 @@ public interface List<E> extends Collection<E> {
      *         ({@code fromIndex < 0 || toIndex > size ||
      *         fromIndex > toIndex})
      */
+    // 返回指定位置之间此列表部分视图，包括fromIndex，不包括toIndex。返回的列表视图的改变会反映在
+    // 父集合上，反之亦然。列表视图可用作范围操作而不是整个列表
     List<E> subList(int fromIndex, int toIndex);
 
     /**

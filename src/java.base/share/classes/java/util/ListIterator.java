@@ -57,6 +57,11 @@ package java.util;
  * @see List#listIterator()
  * @since   1.2
  */
+
+// ListIterator继承Iterator的接口并拓展了关于List的一些操作，如前向迭代，后向迭代，删除、修改、添加元素，
+// 获取迭代游标前向、后向的索引位置。ListIterator迭代游标的当前位置没有元素，游标的位置处于调用next方法和
+// previous返回的两个元素之间，具体见上面接口注释。有n个元素就有n+1个游标位置。注意remove和add方法没有使
+// 用游标定义，他们只是用来操作next和previous方法返回的元素
 public interface ListIterator<E> extends Iterator<E> {
     // Query Operations
 
@@ -69,6 +74,7 @@ public interface ListIterator<E> extends Iterator<E> {
      * @return {@code true} if the list iterator has more elements when
      *         traversing the list in the forward direction
      */
+    // 前向遍历list时如果有元素则返回true
     boolean hasNext();
 
     /**
@@ -81,6 +87,7 @@ public interface ListIterator<E> extends Iterator<E> {
      * @return the next element in the list
      * @throws NoSuchElementException if the iteration has no next element
      */
+    // 返回当前游标的下一个元素，并将游标的位置向后移动一个元素的距离。如果游标后面没有元素抛NoSuchElementException
     E next();
 
     /**
@@ -92,6 +99,7 @@ public interface ListIterator<E> extends Iterator<E> {
      * @return {@code true} if the list iterator has more elements when
      *         traversing the list in the reverse direction
      */
+    // 判断当前游标是否存在上一个元素
     boolean hasPrevious();
 
     /**
@@ -106,6 +114,7 @@ public interface ListIterator<E> extends Iterator<E> {
      * @throws NoSuchElementException if the iteration has no previous
      *         element
      */
+    // 返回当前游标的上一个元素，并将游标的位置向前移动一个元素的距离
     E previous();
 
     /**
@@ -117,6 +126,8 @@ public interface ListIterator<E> extends Iterator<E> {
      *         subsequent call to {@code next}, or list size if the list
      *         iterator is at the end of the list
      */
+    // 返回后续调用next方法将返回的元素的索引，即返回当前游标下一个元素的索引，
+    // 如果当前游标处于list最后一个元素的右边，调用此方法则返回list集合的size
     int nextIndex();
 
     /**
@@ -128,6 +139,8 @@ public interface ListIterator<E> extends Iterator<E> {
      *         subsequent call to {@code previous}, or -1 if the list
      *         iterator is at the beginning of the list
      */
+    // 返回后续调用previous方法将返回的元素的索引，即返回当前游标上一个元素的索引，
+    // 如果当前游标处于list第一个元素的左边，调用此方法则返回-1
     int previousIndex();
 
 
@@ -147,6 +160,10 @@ public interface ListIterator<E> extends Iterator<E> {
      *         {@code add} have been called after the last call to
      *         {@code next} or {@code previous}
      */
+    // 删除上次调用next或previous方法返回的元素。每次调用remove前，必须先调用next或previous，
+    // 否则会抛IllegalStateException。如果在调用next或previous后，已经调用了remove或者add方法，
+    // 再次调用remove方法也会抛IllegalStateException，即距离本次调用remove方法前面最近的方法
+    // 不是next或previous方法就会抛IllegalStateException
     void remove();
 
     /**
@@ -169,6 +186,9 @@ public interface ListIterator<E> extends Iterator<E> {
      *         {@code add} have been called after the last call to
      *         {@code next} or {@code previous}
      */
+    // 替换上一次调用next或previous方法集合的返回值，在调用set方法之前，如果没有调用一次next或者previous方法，
+    // 或者在调用了next、previous方法之后又调用过了remove方法或add方法，就会抛IllegalStateException。即
+    // 距离本次调用set方法最近的方法不是next、previous则抛出IllegalStateException异常
     void set(E e);
 
     /**
@@ -191,5 +211,9 @@ public interface ListIterator<E> extends Iterator<E> {
      * @throws IllegalArgumentException if some aspect of this element
      *         prevents it from being added to this list
      */
+    // 插入元素到当前游标前面，即当前游标调用previous和next方法返回的两个元素之间。如果集合list
+    // 未包含元素，则新添加的元素为集合唯一的元素。由于当前游标位置不变，后续调用next方法仍然返回
+    // 之前的下一个元素，调用previous方法则返回新添加的元素。调用add方法后，后续调用nextIndex
+    // 或previousIndex的索引返回值比之前增加1
     void add(E e);
 }
